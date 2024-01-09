@@ -10,12 +10,12 @@ export class CursorPresence implements CursorPresenceInterface {
         // Implementation here
     }
 
-    broadcast(clientID: string, position: CursorPosition | undefined): void {
+    broadcast(senderClientID: string, position: CursorPosition | undefined): void {
         // Implementation here
     }
 
     addListener(
-        clientID: string,
+        senderClientID: string,
         listener: (position: CursorPosition | undefined) => void
     ): () => void {
         // Implementation here
@@ -33,13 +33,13 @@ export interface CursorPresenceInterface {
 	/**
 	 * Submit cursor position to be broadcasted
 	 */
-	broadcast(clientID: string, position: CursorPosition | undefined): void;
+	broadcast(senderClientID: string, position: CursorPosition | undefined): void;
 
 	/**
 	 * Add a listener function to clientID cursor position udpate
 	 */
 	addListener(
-		clientID: string,
+		senderClientID: string,
 		listener: (position: CursorPosition | undefined) => void
 	): () => void;
 }
