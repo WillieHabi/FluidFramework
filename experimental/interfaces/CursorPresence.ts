@@ -1,12 +1,11 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
 export class CursorPresence implements CursorPresenceInterface {
-    constructor(frequency: number) {
-        // Setup code here, for example:
-        this.setBroadcastFrequency(frequency);
+    constructor(broadcastFrequency?: number) {
+        // Implementation here
     }
 
-    setBroadcastFrequency(frequency: number): void {
+    setBroadcastFrequency(broadcastFrequency: number): void {
         // Implementation here
     }
 
@@ -28,7 +27,7 @@ export interface CursorPresenceInterface {
 	/**
 	 * Set frequency at which batched messages are broadcasted (could be moved to constructor)
 	 */
-	setBroadcastFrequency?(frequency: number): void;
+	setBroadcastFrequency?(broadcastFrequency: number): void;
 	
 	/**
 	 * Submit cursor position to be broadcasted
