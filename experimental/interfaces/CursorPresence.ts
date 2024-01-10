@@ -45,6 +45,7 @@ export interface CursorPresenceInterface {
 
 
 export interface CursorPosition {
+	readonly id?: number;
 	readonly x: number;
 	readonly y: number;
 }
