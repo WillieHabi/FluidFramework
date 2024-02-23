@@ -9,6 +9,7 @@ import {
 	IConnect,
 	IDocumentMessage,
 	NackErrorType,
+	type ISentSignalMessage,
 } from "@fluidframework/protocol-definitions";
 import { createChildLogger } from "@fluidframework/telemetry-utils";
 import { LocalWebSocketServer } from "@fluidframework/server-local-server";
@@ -17,6 +18,7 @@ import type { Socket } from "socket.io-client";
 import { ITelemetryBaseLogger } from "@fluidframework/core-interfaces";
 
 const testProtocolVersions = ["^0.3.0", "^0.2.0", "^0.1.0"];
+const feature_submit_signals_v2 = "submit_signals_v2";
 
 /**
  * Represents a connection to a stream of delta updates
@@ -58,6 +60,9 @@ export class LocalDocumentDeltaConnection extends DocumentDeltaConnection {
 			token, // Token is going to indicate tenant level information, etc...
 			versions: testProtocolVersions,
 		};
+		connectMessage.supportedFeatures = {
+			[feature_submit_signals_v2]: true,
+		};
 		await deltaConnection.initialize(connectMessage, timeoutMs);
 		return deltaConnection;
 	}
@@ -80,8 +85,14 @@ export class LocalDocumentDeltaConnection extends DocumentDeltaConnection {
 	/**
 	 * Submits a new signal to the server
 	 */
-	public submitSignal(message: any): void {
-		this.emitMessages("submitSignal", [[message]]);
+	public submitSignal(content: any, targetClientId?: string): void {
+		const signal: ISentSignalMessage = {
+			content,
+			targetClientId,
+		};
+
+		// back-compat: the typing for this method and emitMessages is incorrect, will be fixed in a future PR
+		this.emitMessages("submitSignal", [signal] as any);
 	}
 
 	/**

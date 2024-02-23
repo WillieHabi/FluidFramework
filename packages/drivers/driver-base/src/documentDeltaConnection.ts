@@ -21,6 +21,7 @@ import {
 	ISignalMessage,
 	ITokenClaims,
 	ScopeType,
+	type ISentSignalMessage,
 } from "@fluidframework/protocol-definitions";
 import { IDisposable, ITelemetryProperties, LogLevel } from "@fluidframework/core-interfaces";
 import {
@@ -340,7 +341,12 @@ export class DocumentDeltaConnection
 			throw new UsageError("Sending signals to specific client ids is not supported.");
 		}
 
-		this.emitMessages("submitSignal", [[content]]);
+		const signal: ISentSignalMessage = {
+			content,
+			targetClientId,
+		};
+
+		this.emitMessages("submitSignal", [signal] as any);
 	}
 
 	/**
