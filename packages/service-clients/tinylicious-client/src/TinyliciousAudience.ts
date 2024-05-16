@@ -17,16 +17,24 @@ import { type TinyliciousMember, type TinyliciousUser } from "./interfaces.js";
  */
 export function createTinyliciousAudienceMember(audienceMember: IClient): TinyliciousMember {
 	const tinyliciousUser = audienceMember.user as Partial<TinyliciousUser>;
+
+	// AB#7448 to reenable this stronger check.  Relaxing to mitigate a bug that the name may be missing.
+	// assert(
+	// 	tinyliciousUser !== undefined &&
+	// 		typeof tinyliciousUser.id === "string" &&
+	// 		typeof tinyliciousUser.name === "string",
+	// 	0x313 /* Specified user was not of type "TinyliciousUser". */,
+	// );
+
 	assert(
-		tinyliciousUser !== undefined &&
-			typeof tinyliciousUser.id === "string" &&
-			typeof tinyliciousUser.name === "string",
+		tinyliciousUser !== undefined && typeof tinyliciousUser.id === "string",
 		0x313 /* Specified user was not of type "TinyliciousUser". */,
 	);
 
 	return {
 		id: tinyliciousUser.id,
-		name: tinyliciousUser.name,
+		// AB#7448 to remove this cast after the check above is strengthened again.
+		name: tinyliciousUser.name as string,
 		connections: [],
 	};
 }
