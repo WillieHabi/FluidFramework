@@ -1,0 +1,6 @@
+{
+	"name": "Bulk status update",
+	"generatedCode": [
+		"const workItems = context.root.workItems;\n\nworkItems.forEach(item => {\n    if (item.status === 'in-review') {\n        item.status = 'done';\n    }\n});"
+	]
+}

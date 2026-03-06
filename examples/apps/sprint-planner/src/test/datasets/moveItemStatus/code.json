@@ -1,0 +1,6 @@
+{
+	"name": "Move item status",
+	"generatedCode": [
+		"const index = context.root.workItems.findIndex(item => item.title === 'Design database schema');\nif (index !== -1) {\n    context.root.workItems[index].status = 'done';\n}"
+	]
+}

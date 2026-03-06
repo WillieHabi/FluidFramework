@@ -1,0 +1,109 @@
+{
+	"name": "Bulk status update",
+	"treeState": {
+		"type": "com.microsoft.fluid.sprint-planner.SprintBoard",
+		"fields": {
+			"sprintName": "Sprint 24",
+			"workItems": {
+				"type": "com.microsoft.fluid.sprint-planner.WorkItems",
+				"fields": [
+					{
+						"type": "com.microsoft.fluid.sprint-planner.WorkItem",
+						"fields": {
+							"id": "df416536-9e70-42cd-b033-057cf1078a89",
+							"title": "Set up CI/CD pipeline",
+							"description": "Configure GitHub Actions for automated builds and deployments.",
+							"status": "done",
+							"priority": "critical",
+							"assignee": "Alice",
+							"storyPoints": 5
+						}
+					},
+					{
+						"type": "com.microsoft.fluid.sprint-planner.WorkItem",
+						"fields": {
+							"id": "df416536-9e70-42cd-b033-057cf1078a88",
+							"title": "Design database schema",
+							"description": "Create the initial database schema for user management.",
+							"priority": "high",
+							"assignee": "Bob",
+							"storyPoints": 8,
+							"status": "done"
+						}
+					},
+					{
+						"type": "com.microsoft.fluid.sprint-planner.WorkItem",
+						"fields": {
+							"id": "df416536-9e70-42cd-b033-057cf1078a87",
+							"title": "Implement user authentication",
+							"description": "Add login and registration endpoints with JWT tokens.",
+							"status": "in-progress",
+							"priority": "high",
+							"assignee": "Alice",
+							"storyPoints": 8
+						}
+					},
+					{
+						"type": "com.microsoft.fluid.sprint-planner.WorkItem",
+						"fields": {
+							"id": "df416536-9e70-42cd-b033-057cf1078a86",
+							"title": "Write API documentation",
+							"description": "Document all REST API endpoints using OpenAPI spec.",
+							"status": "todo",
+							"priority": "medium",
+							"storyPoints": 3
+						}
+					},
+					{
+						"type": "com.microsoft.fluid.sprint-planner.WorkItem",
+						"fields": {
+							"id": "df416536-9e70-42cd-b033-057cf1078a85",
+							"title": "Add unit tests for auth module",
+							"status": "todo",
+							"priority": "medium",
+							"assignee": "Charlie",
+							"storyPoints": 5
+						}
+					},
+					{
+						"type": "com.microsoft.fluid.sprint-planner.WorkItem",
+						"fields": {
+							"id": "df416536-9e70-42cd-b033-057cf1078a84",
+							"title": "Fix responsive layout on mobile",
+							"description": "Several pages break on screen widths below 768px.",
+							"status": "todo",
+							"priority": "low",
+							"storyPoints": 2
+						}
+					}
+				]
+			},
+			"team": {
+				"type": "com.microsoft.fluid.sprint-planner.Team",
+				"fields": [
+					{
+						"type": "com.microsoft.fluid.sprint-planner.TeamMember",
+						"fields": {
+							"name": "Alice",
+							"capacity": 13
+						}
+					},
+					{
+						"type": "com.microsoft.fluid.sprint-planner.TeamMember",
+						"fields": {
+							"name": "Bob",
+							"capacity": 10
+						}
+					},
+					{
+						"type": "com.microsoft.fluid.sprint-planner.TeamMember",
+						"fields": {
+							"name": "Charlie",
+							"capacity": 8
+						}
+					}
+				]
+			}
+		}
+	}
+}

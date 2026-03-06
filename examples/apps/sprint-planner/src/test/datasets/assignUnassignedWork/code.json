@@ -1,0 +1,6 @@
+{
+	"name": "Assign unassigned work",
+	"generatedCode": [
+		"const workItems = context.root.workItems;\n\nworkItems.forEach((item) => {\n  if (!item.assignee) {\n    item.assignee = \"Alice\";\n  }\n});"
+	]
+}

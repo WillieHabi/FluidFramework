@@ -1,0 +1,55 @@
+{
+  "name": "sprint_planner_basic",
+  "metadata": { "version": "1.0.0", "domain": "sprint-planning" },
+  "llmEvalConfig": {
+    "dataInterpretationPrompt": "You are evaluating a sprint planning AI agent that edits a SharedTree data structure. The input contains the initial state of a sprint board (with work items and team members) and a natural language instruction. The output is the resulting sprint board state after the agent processed the instruction. Work items have fields: title, description, status (todo/in-progress/in-review/done), priority (critical/high/medium/low), assignee, storyPoints, and created timestamp. Team members have name and capacity fields.",
+    "rubrics": [
+      {
+        "name": "Task Completion",
+        "description": "Did the agent correctly execute the requested operation? Count the specific requirements in the instruction and verify each one is reflected in the output tree state."
+      },
+      {
+        "name": "Data Integrity",
+        "description": "Are all pre-existing work items and team members preserved correctly? Check that items not mentioned in the instruction are unchanged. Verify no data was lost or corrupted."
+      },
+      {
+        "name": "Content Quality",
+        "description": "Are the values set by the agent reasonable and appropriate? Check that status values, priorities, assignees, and story points make sense in context."
+      }
+    ]
+  },
+  "datasets": [
+    {
+      "name": "create_work_item",
+      "metadata": { "category": "crud", "tags": ["create", "work-item"] },
+      "input": {
+        "prompt": "Create a new task titled 'Fix login bug' with high priority",
+        "domainHints": "This is a sprint planning board for an agile software development team. Work items have statuses: todo, in-progress, in-review, done. Priorities are: critical, high, medium, low. Story points use Fibonacci numbers: 1, 2, 3, 5, 8, 13."
+      }
+    },
+    {
+      "name": "move_item_status",
+      "metadata": { "category": "update", "tags": ["status", "work-item"] },
+      "input": {
+        "prompt": "Move 'Design database schema' from in-review to done",
+        "domainHints": "This is a sprint planning board for an agile software development team. Work items have statuses: todo, in-progress, in-review, done. Priorities are: critical, high, medium, low. Story points use Fibonacci numbers: 1, 2, 3, 5, 8, 13."
+      }
+    },
+    {
+      "name": "assign_work",
+      "metadata": { "category": "update", "tags": ["assign", "work-item"] },
+      "input": {
+        "prompt": "Assign 'Write API documentation' to Bob",
+        "domainHints": "This is a sprint planning board for an agile software development team. Work items have statuses: todo, in-progress, in-review, done. Priorities are: critical, high, medium, low. Story points use Fibonacci numbers: 1, 2, 3, 5, 8, 13."
+      }
+    },
+    {
+      "name": "bulk_status_update",
+      "metadata": { "category": "bulk", "tags": ["status", "bulk"] },
+      "input": {
+        "prompt": "Move all todo items to in-progress",
+        "domainHints": "This is a sprint planning board for an agile software development team. Work items have statuses: todo, in-progress, in-review, done. Priorities are: critical, high, medium, low. Story points use Fibonacci numbers: 1, 2, 3, 5, 8, 13."
+      }
+    }
+  ]
+}

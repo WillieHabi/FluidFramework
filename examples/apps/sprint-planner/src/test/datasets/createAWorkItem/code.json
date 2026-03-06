@@ -1,0 +1,6 @@
+{
+	"name": "Create a work item",
+	"generatedCode": [
+		"// Creating a new work item with the given title and high priority\nconst newWorkItem = context.create.WorkItem({\n  title: 'Fix login bug',\n  status: 'todo',  // Assuming the default status is 'todo'\n  priority: 'high',\n  storyPoints: 3 // Assuming an effort estimation\n});\n// Adding the new work item to the workItems array\ncontext.root.workItems.insertAt(context.root.workItems.length, newWorkItem);"
+	]
+}
