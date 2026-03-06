@@ -166,7 +166,10 @@ export async function generateScreenshot(
 	try {
 		// Dynamic import so the eval framework still works without puppeteer installed
 		const puppeteer = await import("puppeteer");
-		const browser = await puppeteer.default.launch({ headless: true });
+		const browser = await puppeteer.default.launch({
+			headless: true,
+			args: ["--no-sandbox", "--disable-setuid-sandbox"],
+		});
 		const page = await browser.newPage();
 		await page.setViewport({ width: 1200, height: 800 });
 		await page.setContent(html, { waitUntil: "networkidle0" });
