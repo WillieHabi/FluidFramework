@@ -90,7 +90,8 @@ export async function generateArtifacts(
 
 			// Enrich the dataset input with the initial tree state captured during generation,
 			// so the evaluator can see the before/after diff
-			const { initialTreeState, ...restMetadata } = outputMetadata as Record<string, unknown>;
+			const { initialTreeState, generatedCode, screenshotData, ...restMetadata } =
+				outputMetadata as Record<string, unknown>;
 			if (initialTreeState) {
 				(input as Record<string, unknown>).initialTreeState = initialTreeState;
 			}
@@ -101,6 +102,22 @@ export async function generateArtifacts(
 				inputPath,
 				JSON.stringify({ appInput: dataset, appOutput: output }, null, 2),
 			);
+
+			// Write generated code if available
+			if (generatedCode) {
+				fs.writeFileSync(
+					path.join(appDataDir, "generatedCode.js"),
+					String(generatedCode),
+				);
+			}
+
+			// Write screenshot if available
+			if (screenshotData) {
+				fs.writeFileSync(
+					path.join(appDataDir, "screenshot.png"),
+					Buffer.from(screenshotData as string, "base64"),
+				);
+			}
 
 			datasetArtifacts.push({
 				name,

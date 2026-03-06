@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sprint Planner Eval</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      :root {
+        --bg: #f8f9fa;
+        --surface: #ffffff;
+        --border: #dee2e6;
+        --text: #212529;
+        --text-muted: #6c757d;
+        --primary: #0078d4;
+        --primary-hover: #106ebe;
+        --success: #107c10;
+        --error: #d13438;
+        --code-bg: #f1f3f5;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+      .header { margin-bottom: 32px; }
+      .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+      .header p { color: var(--text-muted); font-size: 14px; }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+      .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+
+      .form-row { display: flex; gap: 16px; margin-bottom: 16px; align-items: end; }
+      .form-group { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+      .form-group label {
+        font-size: 12px; font-weight: 600; color: var(--text-muted);
+        text-transform: uppercase; letter-spacing: 0.5px;
+      }
+
+      select, input {
+        padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px;
+        font-size: 14px; font-family: inherit; background: var(--surface);
+      }
+      select:focus, input:focus {
+        outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary);
+      }
+
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 24px; border: none; border-radius: 4px;
+        font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+      }
+      .btn-primary { background: var(--primary); color: white; }
+      .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+      .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+      .progress-log {
+        background: #1e1e1e; color: #cccccc; border-radius: 6px; padding: 16px;
+        font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+        font-size: 12px; line-height: 1.6; max-height: 300px;
+        overflow-y: auto; white-space: pre-wrap; word-break: break-all;
+      }
+      .progress-log .line-warn { color: #ce9178; }
+      .progress-log .line-error { color: #f48771; }
+      .progress-log .line-phase { color: #569cd6; font-weight: bold; }
+
+      .summary-content { font-size: 14px; }
+      .summary-content h1 { font-size: 20px; margin-bottom: 12px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+      .summary-content h2 { font-size: 16px; margin: 20px 0 8px; }
+      .summary-content table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 13px; }
+      .summary-content th, .summary-content td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+      .summary-content th { background: var(--code-bg); font-weight: 600; }
+      .summary-content img { max-width: 100%; border: 1px solid var(--border); border-radius: 4px; margin: 8px 0; }
+      .summary-content a { color: var(--primary); text-decoration: none; }
+      .summary-content a:hover { text-decoration: underline; }
+
+      .file-links { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+      .file-link {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 6px 12px; background: var(--code-bg); border: 1px solid var(--border);
+        border-radius: 4px; font-size: 13px; color: var(--primary); text-decoration: none;
+      }
+      .file-link:hover { background: var(--border); }
+
+      .status-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;
+      }
+      .status-running { background: #fff3cd; color: #856404; }
+      .status-complete { background: #d4edda; color: var(--success); }
+      .status-error { background: #f8d7da; color: var(--error); }
+
+      .spinner {
+        width: 14px; height: 14px; border: 2px solid transparent;
+        border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .runs-list { list-style: none; }
+      .runs-list li { padding: 8px 0; border-bottom: 1px solid var(--code-bg); font-size: 13px; }
+      .runs-list li:last-child { border-bottom: none; }
+      .run-name { font-family: monospace; color: var(--primary); cursor: pointer; }
+      .run-name:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef, useCallback } = React;
+
+      const JUDGE_MODEL_OPTIONS = [
+        'gpt-4o-mini',
+        'gpt-4o',
+        'gpt-4.1-mini',
+        'gpt-4.1-nano',
+        'gpt-4.1',
+      ];
+
+      function resolveUrl(href, baseUrl) {
+        if (href.startsWith('/') || href.startsWith('http')) return href;
+        return `${baseUrl}/${href}`;
+      }
+
+      function formatInline(text, baseUrl) {
+        return text
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\[(.*?)\]\((.*?)\)/g, (_, label, href) => {
+            const url = resolveUrl(href, baseUrl);
+            return `<a href="${url}" target="_blank">${label}</a>`;
+          });
+      }
+
+      function renderMarkdown(md, baseUrl) {
+        const lines = md.split('\n');
+        const html = [];
+        let inTable = false;
+        let isHeader = true;
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+
+          if (line.trim().startsWith('|')) {
+            const cells = line.split('|').filter((c, idx, arr) => idx > 0 && idx < arr.length - 1).map((c) => c.trim());
+            if (cells.every((c) => /^[-:]+$/.test(c))) { isHeader = false; continue; }
+            if (!inTable) { html.push('<table>'); inTable = true; isHeader = true; }
+            const tag = isHeader ? 'th' : 'td';
+            html.push('<tr>' + cells.map((c) => `<${tag}>${formatInline(c, baseUrl)}</${tag}>`).join('') + '</tr>');
+            continue;
+          }
+
+          if (inTable) { html.push('</table>'); inTable = false; isHeader = true; }
+
+          if (line.startsWith('## ')) html.push(`<h2>${formatInline(line.slice(3), baseUrl)}</h2>`);
+          else if (line.startsWith('# ')) html.push(`<h1>${formatInline(line.slice(2), baseUrl)}</h1>`);
+          else if (line.match(/!\[.*?\]\(.*?\)/)) {
+            const match = line.match(/!\[(.*?)\]\((.*?)\)/);
+            if (match) html.push(`<img src="${resolveUrl(match[2], baseUrl)}" alt="${match[1]}" />`);
+          }
+          else if (line.trim()) html.push(`<p>${formatInline(line, baseUrl)}</p>`);
+        }
+
+        if (inTable) html.push('</table>');
+        return html.join('\n');
+      }
+
+      function App() {
+        const [options, setOptions] = useState({ datasets: [], configs: [] });
+        const [dataset, setDataset] = useState('sprint_planner_scenarios.json');
+        const [config, setConfig] = useState('default.json');
+        const [judgeModel, setJudgeModel] = useState('gpt-4o-mini');
+
+        const [status, setStatus] = useState('idle');
+        const [logs, setLogs] = useState([]);
+        const [datasetSummaries, setDatasetSummaries] = useState([]);
+        const [outputDir, setOutputDir] = useState('');
+        const [errorMessage, setErrorMessage] = useState('');
+        const [runs, setRuns] = useState([]);
+        const [viewedRun, setViewedRun] = useState(null);
+
+        const logRef = useRef(null);
+
+        useEffect(() => {
+          fetch('/api/options').then((r) => r.json()).then(setOptions).catch(() => {});
+          fetch('/api/runs').then((r) => r.json()).then(setRuns).catch(() => {});
+        }, []);
+
+        useEffect(() => {
+          if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+        }, [logs]);
+
+        const runEval = useCallback(() => {
+          setStatus('running');
+          setLogs([]);
+          setDatasetSummaries([]);
+          setOutputDir('');
+          setErrorMessage('');
+          setViewedRun(null);
+
+          const body = JSON.stringify({ dataset, config, judgeModel });
+
+          fetch('/api/run-eval', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
+            .then((response) => {
+              const reader = response.body.getReader();
+              const decoder = new TextDecoder();
+              let buffer = '';
+
+              function processChunk({ done, value }) {
+                if (done) return;
+                buffer += decoder.decode(value, { stream: true });
+                const events = buffer.split('\n\n');
+                buffer = events.pop();
+
+                for (const event of events) {
+                  const lines = event.split('\n');
+                  let eventType = '';
+                  let data = '';
+                  for (const line of lines) {
+                    if (line.startsWith('event: ')) eventType = line.slice(7);
+                    if (line.startsWith('data: ')) data = line.slice(6);
+                  }
+                  if (!eventType || !data) continue;
+
+                  try {
+                    const parsed = JSON.parse(data);
+                    if (eventType === 'progress') setLogs((prev) => [...prev, parsed.message]);
+                    else if (eventType === 'complete') {
+                      setStatus('complete');
+                      setDatasetSummaries(parsed.datasetSummaries || []);
+                      setOutputDir(parsed.outputDir || '');
+                      fetch('/api/runs').then((r) => r.json()).then(setRuns).catch(() => {});
+                    } else if (eventType === 'error') {
+                      setStatus('error');
+                      setErrorMessage(parsed.message);
+                    }
+                  } catch {}
+                }
+                return reader.read().then(processChunk);
+              }
+              return reader.read().then(processChunk);
+            })
+            .catch((err) => { setStatus('error'); setErrorMessage(err.message); });
+        }, [dataset, config, judgeModel]);
+
+        const getRunDirName = () => {
+          if (viewedRun) return viewedRun.name;
+          if (!outputDir) return '';
+          return outputDir.split('/').pop();
+        };
+
+        const loadRun = useCallback((runName) => {
+          fetch(`/api/runs/${runName}/summaries`)
+            .then((r) => r.json())
+            .then((data) => {
+              setViewedRun({ name: data.runName, datasetSummaries: data.datasetSummaries });
+              setDatasetSummaries(data.datasetSummaries);
+              setOutputDir('');
+              setLogs([]);
+              setStatus('idle');
+              setErrorMessage('');
+            })
+            .catch(() => {});
+        }, []);
+
+        const formatLogLine = (line) => {
+          if (line.startsWith('---')) return { className: 'line-phase', text: line };
+          if (line.startsWith('[warn]')) return { className: 'line-warn', text: line };
+          if (line.startsWith('[error]')) return { className: 'line-error', text: line };
+          return { className: '', text: line };
+        };
+
+        return (
+          <div className="container">
+            <div className="header">
+              <h1>Sprint Planner Eval</h1>
+              <p>
+                Run evaluations for the Sprint Planner app. Generates board edits from scenario datasets using
+                SharedTreeSemanticAgent, then evaluates using LLM-as-judge scoring with configurable rubrics.
+              </p>
+            </div>
+
+            <div className="card">
+              <h2>Configuration</h2>
+
+              <div className="form-row">
+                <div className="form-group" style={{ flex: 2 }}>
+                  <label>Dataset</label>
+                  <select value={dataset} onChange={(e) => setDataset(e.target.value)}>
+                    {options.datasets.map((d) => (
+                      <option key={d.file} value={d.file}>{d.name} ({d.scenarioCount} scenarios)</option>
+                    ))}
+                    {!options.datasets.some((d) => d.file === dataset) && (
+                      <option value={dataset}>{dataset}</option>
+                    )}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Eval Config</label>
+                  <select value={config} onChange={(e) => setConfig(e.target.value)}>
+                    {options.configs.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                    {!options.configs.includes(config) && <option value={config}>{config}</option>}
+                  </select>
+                </div>
+              </div>
+
+              {(() => {
+                const selected = options.datasets.find((d) => d.file === dataset);
+                return selected && selected.description ? (
+                  <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 8 }}>{selected.description}</p>
+                ) : null;
+              })()}
+
+              <div className="file-links" style={{ marginBottom: 16 }}>
+                <a className="file-link" href={`/api/datasets/${dataset}`} target="_blank">View dataset JSON</a>
+                <a className="file-link" href={`/api/configs/${config}`} target="_blank">View config JSON</a>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Judge Model</label>
+                  <select value={judgeModel} onChange={(e) => setJudgeModel(e.target.value)}>
+                    {JUDGE_MODEL_OPTIONS.map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <button className="btn btn-primary" onClick={runEval} disabled={status === 'running'}>
+                {status === 'running' ? (
+                  <><span className="spinner"></span>Running Eval...</>
+                ) : 'Run Eval'}
+              </button>
+            </div>
+
+            {logs.length > 0 && (
+              <div className="card">
+                <h2>
+                  Progress{' '}
+                  {status === 'running' && <span className="status-badge status-running"><span className="spinner"></span> Running</span>}
+                  {status === 'complete' && <span className="status-badge status-complete">Complete</span>}
+                  {status === 'error' && <span className="status-badge status-error">Error</span>}
+                </h2>
+                <div className="progress-log" ref={logRef}>
+                  {logs.map((line, i) => {
+                    const { className, text } = formatLogLine(line);
+                    return <div key={i} className={className}>{text}</div>;
+                  })}
+                </div>
+                {errorMessage && (
+                  <p style={{ color: 'var(--error)', marginTop: 12, fontSize: 14 }}>
+                    <strong>Error:</strong> {errorMessage}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {datasetSummaries.length > 0 && (
+              <div className="card">
+                <h2>Results {viewedRun && <span style={{ fontWeight: 400, fontSize: 13, color: 'var(--text-muted)' }}>- {viewedRun.name}</span>}</h2>
+
+                {(outputDir || viewedRun) && (
+                  <div className="file-links">
+                    <a className="file-link" href={`/api/results/${getRunDirName()}/result.json`} target="_blank">(scenario) result.json</a>
+                    {datasetSummaries.map((ds) => (
+                      <a key={ds.datasetName} className="file-link" href={`/api/results/${getRunDirName()}/dataset-${ds.datasetName}/result.json`} target="_blank">
+                        (dataset) {ds.datasetName} result.json
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                {datasetSummaries.map((ds) => {
+                  const baseUrl = `/api/results/${getRunDirName()}/dataset-${ds.datasetName}`;
+                  return (
+                    <div key={ds.datasetName} className="summary-content" style={{ marginTop: 20 }}>
+                      <div dangerouslySetInnerHTML={{ __html: renderMarkdown(ds.markdown, baseUrl) }} />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {runs.length > 0 && (
+              <div className="card">
+                <h2>Previous Runs</h2>
+                <ul className="runs-list">
+                  {runs.map((run) => (
+                    <li key={run.name}>
+                      <span className="run-name" style={{ fontWeight: viewedRun && viewedRun.name === run.name ? 600 : 400 }} onClick={() => loadRun(run.name)}>
+                        {run.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

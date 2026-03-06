@@ -37,6 +37,7 @@
 		"test:mocha:verbose": "cross-env FLUID_TEST_VERBOSE=1 npm run test:mocha",
 		"generate:dataset": "node ./lib/test/generateDataset.js",
 		"eval": "node ./lib/eval/cli.js",
+		"eval:app": "node ./lib/eval/evalApp/server.js",
 		"webpack": "webpack --env production"
 	},
 	"dependencies": {

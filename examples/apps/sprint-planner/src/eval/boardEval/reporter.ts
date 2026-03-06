@@ -66,6 +66,12 @@ export function generateDatasetSummaryMarkdown(datasetResult: DatasetEvalResult)
   lines.push('**Output State:** [input.json](appData/input.json)');
   lines.push('');
 
+  // Generated code section (linked if artifact generator wrote it)
+  lines.push('## Generated Code');
+  lines.push('');
+  lines.push('**Code:** [generatedCode.js](appData/generatedCode.js)');
+  lines.push('');
+
   // Evaluation results
   if (datasetResult.evalResult.length > 0) {
     lines.push('## Evaluation Results');

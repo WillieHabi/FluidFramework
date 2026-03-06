@@ -37,7 +37,7 @@ export class OpenAiChatModel implements SharedTreeChatModel {
 	private readonly client: OpenAI;
 	private readonly modelName: string;
 	private readonly maxTokens: number;
-	private readonly messages: ChatCompletionMessageParam[] = [];
+	public readonly messages: ChatCompletionMessageParam[] = [];
 
 	public readonly editToolName = "GenerateTreeEditingCode";
 
