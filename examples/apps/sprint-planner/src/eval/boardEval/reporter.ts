@@ -59,10 +59,8 @@ export function generateDatasetSummaryMarkdown(datasetResult: DatasetEvalResult)
   // Output section
   lines.push('## Output');
   lines.push('');
-  if (datasetResult.screenshotData) {
-    lines.push(`![Board Screenshot](appData/screenshot.png)`);
-    lines.push('');
-  }
+  lines.push(`![Board Screenshot](appData/screenshot.png)`);
+  lines.push('');
   lines.push('**Output State:** [input.json](appData/input.json)');
   lines.push('');
 

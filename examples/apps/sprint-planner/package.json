@@ -45,10 +45,11 @@
 		"@fluidframework/tinylicious-client": "workspace:~",
 		"@fluidframework/tree": "workspace:~",
 		"@fluidframework/tree-agent": "workspace:~",
-		"fluid-framework": "workspace:~",
 		"commander": "^12.1.0",
+		"fluid-framework": "workspace:~",
 		"openai": "^4.73.0",
 		"process": "^0.11.10",
+		"puppeteer": "^23.10.3",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1"
 	},

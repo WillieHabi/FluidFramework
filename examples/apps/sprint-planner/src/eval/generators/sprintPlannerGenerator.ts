@@ -19,6 +19,7 @@ import type {
 	DatasetGenerationResult,
 } from "../boardEval/types/generatorTypes.js";
 import type { JsonObject } from "../boardEval/types/jsonTypes.js";
+import { generateScreenshot } from "./screenshotGenerator.js";
 
 const DEFAULT_DOMAIN_HINTS =
 	"This is a sprint planning board for an agile software development team. " +
@@ -104,11 +105,16 @@ export class SprintPlannerGenerator implements OutputGenerator {
 			})
 			.join("\n\n// --- next edit ---\n\n");
 
+		// Generate a screenshot of the board (gracefully skips if puppeteer is not installed)
+		const screenshotData =
+			output !== null ? await generateScreenshot(output) : undefined;
+
 		return {
 			output,
 			outputMetadata: {
 				initialTreeState,
 				generatedCode: generatedCode || undefined,
+				screenshotData,
 				agentResponse: response,
 				executionTimeMs,
 				model: chatModel.name ?? "gpt-4o",
