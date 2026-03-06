@@ -222,10 +222,7 @@ const server = http.createServer((req, res) => {
 			const params = JSON.parse(body);
 			const dataset: string =
 				params.dataset ?? "sprint_planner_scenarios.json";
-			const configFile: string = params.config ?? "default.json";
-			const evalConfig: string = configFile.includes("/")
-				? configFile
-				: `configs/${configFile}`;
+			const evalConfig: string = params.config ?? "default.json";
 			const judgeModel: string = params.judgeModel ?? "gpt-4o-mini";
 
 			// Set up SSE
