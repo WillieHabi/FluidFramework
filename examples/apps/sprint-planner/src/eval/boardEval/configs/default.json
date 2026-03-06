@@ -1,5 +1,6 @@
 {
   "evaluators": [
-    { "name": "llm-board-quality", "enabled": true, "weight": 1.0 }
+    { "name": "llm-board-quality", "enabled": true, "weight": 1.0 },
+    { "name": "llm-code-quality", "enabled": true, "weight": 1.0 }
   ]
 }

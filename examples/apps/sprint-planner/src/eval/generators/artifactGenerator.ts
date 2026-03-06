@@ -97,10 +97,14 @@ export async function generateArtifacts(
 			}
 
 			// Write input.json (contains appInput and appOutput)
+			// generatedCode is included alongside the output tree state
+			const appOutput = generatedCode
+				? { treeState: output, generatedCode }
+				: output;
 			const inputPath = path.join(appDataDir, "input.json");
 			fs.writeFileSync(
 				inputPath,
-				JSON.stringify({ appInput: dataset, appOutput: output }, null, 2),
+				JSON.stringify({ appInput: dataset, appOutput }, null, 2),
 			);
 
 			// Write generated code if available

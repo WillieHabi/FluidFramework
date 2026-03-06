@@ -18,6 +18,7 @@ import { generateArtifacts } from "./generators/artifactGenerator.js";
 
 // Import evaluators to register them
 import "./boardEval/evaluators/llmBoardQualityEvaluator.js";
+import "./boardEval/evaluators/llmCodeQualityEvaluator.js";
 
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDirPath = path.dirname(currentFilePath);
